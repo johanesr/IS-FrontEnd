@@ -14,7 +14,7 @@ class Footer extends Component {
                 <Container>
                     <Row>
                         <Col sm="4">
-                            <Card body outline color="primary">
+                            <Card body>
                                 <i className="fas fa-envelope big-icon"></i>
                                 <CardTitle>Email</CardTitle>
                                 <hr />

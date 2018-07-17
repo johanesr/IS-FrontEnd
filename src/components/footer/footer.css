@@ -1,9 +1,16 @@
 .Footer {
     background: black;
+    font-family: 'Abel', sans-serif;
 }
 
-Card {
+.card {
     margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.card-text {
+    font-size: 25px;
+    padding-bottom: 25px;
 }
 
 hr {
@@ -26,4 +33,36 @@ hr {
 .copyright {
     color: white;
     margin-top: 30px;
+}
+
+.fab {
+    padding: 20px;
+    font-size: 30px;
+    width: 70px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px 2px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+/*.fab:hover {*/
+    /*opacity: 0.7;*/
+    /*background-color: #3e8e41;*/
+    /*color: white;*/
+/*}*/
+
+.fa-facebook-square:hover {
+    background: #3B5998;
+    color: white;
+}
+
+.fa-twitter-square:hover {
+    background: #55ACEE;
+    color: white;
+}
+
+.fa-linkedin:hover {
+    background: #007bb5;
+    color: white;
 }
