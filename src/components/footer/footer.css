@@ -1,0 +1,29 @@
+.Footer {
+    background: black;
+}
+
+Card {
+    margin-bottom: 10px;
+}
+
+hr {
+    background: aquamarine;
+    font-size: 10px;
+    border: none;
+    height: 10px;
+}
+
+.big-icon {
+    font-size: 25px;
+    padding-bottom: 15px;
+}
+
+.Social {
+    color: #d3d3d3;
+    margin-left: 15px;
+}
+
+.copyright {
+    color: white;
+    margin-top: 30px;
+}
