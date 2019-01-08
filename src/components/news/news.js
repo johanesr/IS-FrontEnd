@@ -10,7 +10,7 @@ class News extends React.Component {
         return (
             <div>
                 <p style={pStyle}><marquee bgcolor="#02ADEE">
-                    This area is for the news!!!</marquee></p>
+                    Input Image to start!</marquee></p>
             </div>
         )
     }

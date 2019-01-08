@@ -1,18 +1,8 @@
 import React from "react";
 import {
-    Collapse,
     Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem } from "reactstrap";
+    NavbarBrand, } from "reactstrap";
 import './navbar.css';
-import Wifiku from "../../Wifiku.jpg";
 
 class NavigationBar extends React.Component {
     render() {
@@ -21,13 +11,13 @@ class NavigationBar extends React.Component {
                 <Navbar className="NavBar" light expand="md">
                     <NavbarBrand>
                         {/*<img src={ Wifiku } alt="Logo" />*/}
-                        <strong>Wifiku</strong>
+                        <strong>Intelligent System Project</strong>
                     </NavbarBrand>
-                    <Nav className="ml-auto" navbar>
-                        <NavItem>
-                            <NavLink href="/components/">All Around you</NavLink>
-                        </NavItem>
-                    </Nav>
+                    {/*<Nav className="ml-auto" navbar>*/}
+                        {/*<NavItem>*/}
+                            {/*<NavLink href="/components/">Image-Classification</NavLink>*/}
+                        {/*</NavItem>*/}
+                    {/*</Nav>*/}
                 </Navbar>
             </div>
         )
