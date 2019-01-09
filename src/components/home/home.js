@@ -22,7 +22,8 @@ class Home extends Component {
             restaurantAddress: ["","",""],
             foodCalories: [0,0,0],
             foodRecipe: ["","",""],
-            foodImage: ["","",""]
+            foodImage: ["","",""],
+            loading: ""
         };
     }
 
@@ -31,6 +32,9 @@ class Home extends Component {
         // Prevent Double Clicking
         e.preventDefault();
 
+        this.setState({
+            loading: "Please Wait, Your Data is being Processed"
+        });
         // Show image file on canvas
         var imageLoader = document.getElementById('inputImage');
         var canvas = document.getElementById('imageCanvas');
@@ -158,14 +162,13 @@ class Home extends Component {
               image.push(data.hits[0].recipe.image);
               image.push(data.hits[1].recipe.image);
               image.push(data.hits[2].recipe.image);
-              console.log(image);
 
               this.setState({
                   foodCalories: [calories[0],calories[1],calories[2]],
                   foodRecipe: [recipe[0],recipe[1],recipe[2]],
-                  foodImage: [image[0],image[1],image[2]]
+                  foodImage: [image[0],image[1],image[2]],
+                  loading: "Complete"
               });
-              console.log(this.state);
             });
     }
 
@@ -185,6 +188,8 @@ class Home extends Component {
                             </Row>
                             <br/>
                             <span>Result:</span>
+                            <br/>
+                            <span className="loadingText">{this.state.loading}</span>
                             <Row>
                                 <Col xs="12" md="3">
                                     <Card>
