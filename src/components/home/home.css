@@ -1,7 +1,7 @@
 .specText {
     width: 100%;
     text-align: center;
-    font-size: 30px;
+    font-size: 50px;
 }
 
 .enterText {
@@ -9,10 +9,25 @@
     font-size: 30px;
 }
 
-.file-input{
+.file-input {
     text-align: center;
     font-size: 30px;
     /*margin-left: 100px;*/
+    display: none;
+}
+
+.input-file {
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #000000;
+    background-color: #add8e6;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 5px 10px #000000;
+    margin-bottom: 30px;
 }
 
 .image-canvas{
@@ -23,4 +38,22 @@
     text-align: center;
     line-height: 300px;
     vertical-align: middle;
+}
+
+h3 {
+    font-family: 'Paytone One', sans-serif;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+}
+
+h3 span {
+    font-family: 'Paytone One', sans-serif;
+    display: block;
+    margin: 11px 0 17px 0;
+    font-size: 80px;
+    line-height: 80px;
+    color: #000000;
+    text-shadow: 0 13.36px 8.896px #c4b59d,0 -2px 1px #fff;
+    letter-spacing: 5px;
 }

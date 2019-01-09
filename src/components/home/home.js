@@ -18,7 +18,10 @@ class Home extends Component {
         this.state = {
             type: "default",
             percentage: 0,
-            nearestRestaurant: []
+            restaurantName: ["","",""],
+            restaurantAddress: ["","",""],
+            foodCalories: [0,0,0],
+            foodRecipe: ["","",""]
         };
     }
 
@@ -58,12 +61,6 @@ class Home extends Component {
         // Fetching Data from the Classification Application
         this.classificationAPI();
 
-        // Fetching Data from Zomato to obtain nearest restaurant
-        this.zomatoAPI();
-
-        // Fetching Data from Edamam for popular recipes and average calories
-        // this.edamamAPI();
-
     };
 
     classificationAPI() {
@@ -74,13 +71,8 @@ class Home extends Component {
         // formData.append('file',fileInput.files[0]);
         formData.append('image',input.files[0]);
 
-        console.log(input);
-        console.log(input.files[0]);
-        console.log(input.files);
-        console.log(formData);
-
         const upload = (inputFile) => {
-            fetch('http://192.168.1.134:5000/classify-image', {
+            fetch('http://192.168.1.103:5000/classify-image', {
                 method: 'POST',
                 // headers: {
                 //     "Content-type": "application/json",
@@ -89,62 +81,84 @@ class Home extends Component {
             })
                 .then(res => {return res.json()})
                 .then(data => {
-                    console.log(data);
                     this.setState({
                         type: data.food,
                         percentage: data.probability
                     });
-                    console.log(this.state)
+                  // Fetching Data from Zomato to obtain nearest restaurant
+                })
+                .then(data2 => {
+                    var food = this.state.type;
+                    this.zomatoAPI(food);
+                    // Fetching Data from Edamam for popular recipes and average calories
+                    this.edamamAPI(food);
                 })
                 .catch(err => console.log(err));
         }
 
-        upload(formData);
+          upload(formData);
     }
 
-    zomatoAPI() {
+    zomatoAPI(food) {
         const httpOptionsZomato = {
             method: 'GET',
             headers: {
                 "Content-type": "application/x-www-form-urlencoded",
                 "user-key": "1c5365b7b3563fb943f4fd4997012f3e"
-            },
-            params: {
-                q: "pizza",
-                la: -6.1123883999999995,
-                lon: 106.7529629,
-                sort: "real_distance"
             }
         };
 
-        fetch('https://developers.zomato.com/api/v2.1/search?', httpOptionsZomato)
-            .then(res => {return res.json()})
+        var url = "https://developers.zomato.com/api/v2.1/search?";
+        var langitude = -6.175110;
+        var longitude = 106.865036;
+        var sort = "real_distance"
+
+        fetch(url + "q=" + food + "&la=" + langitude + "&lon=" + longitude + "&sort=" + sort, httpOptionsZomato)
+            .then(res => { return res.json() })
             .then(data => {
-                console.log(data.restaurants);
                 var newArray = [];
                 newArray.push(data.restaurants[0]);
                 newArray.push(data.restaurants[1]);
                 newArray.push(data.restaurants[2]);
                 this.setState({
-                    nearestRestaurant: newArray
+                  restaurantName: [newArray[0].restaurant.name,newArray[1].restaurant.name,newArray[2].restaurant.name],
+                  restaurantAddress: [newArray[0].restaurant.location.address,newArray[1].restaurant.location.address,newArray[2].restaurant.location.address]
                 });
             })
             .catch(err => console.log(err));
     }
 
-    edamamAPI() {
+    edamamAPI(food) {
         const httpOptionsEdamam = {
-            method: 'GET',
-            params: {
-                q: "pizza",
-                app_id: "cb7fa61b",
-                app_key: "b6f6c3ba14703edc0762250c1009976c",
-            }
+            method: 'GET'
         };
 
+        var url = 'https://api.edamam.com/search?';
+        var q = food;
+        var app_id = "cb7fa61b";
+        var app_key = "b6f6c3ba14703edc0762250c1009976c";
+
+
         console.log("Edamam");
-        fetch('https://api.edamam.com/search?', httpOptionsEdamam)
-            .then(res => console.log(res));
+        fetch(url + "q=" + q + "&app_id=" + app_id + "&app_key=" + app_key, httpOptionsEdamam)
+            .then(res => { return res.json() })
+            .then(data => {
+              var calories = [];
+              calories.push(data.hits[0].recipe.calories);
+              calories.push(data.hits[1].recipe.calories);
+              calories.push(data.hits[2].recipe.calories);
+
+              var recipe = [];
+              recipe.push(data.hits[0].recipe.url);
+              recipe.push(data.hits[1].recipe.url);
+              recipe.push(data.hits[2].recipe.url);
+
+              this.setState({
+                foodCalories: [calories[0],calories[1],calories[2]],
+                foodRecipe: [recipe[0],recipe[1],recipe[2]]
+              });
+              console.log(this.state);
+            });
     }
 
     render() {
@@ -153,28 +167,18 @@ class Home extends Component {
                 <Container>
                     <Card>
                         <CardBody>
-                            <Row>
-                                <span className="specText">Display: [Max Width: 500px] [Max Height: 500px]</span>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <span className="enterText">Enter Your File:</span>
-                                <input type="file" id="inputImage" name="image" className="file-input" onChange={this.handleInput.bind(this)} />
-
-                                {/*<form action="http://192.168.1.134:5000/classify-image" method="POST"*/}
-                                      {/*encType="multipart/form-data">*/}
-                                    {/*<input type="file" name="image"/>*/}
-                                    {/*<input type="submit"/>*/}
-                                {/*</form>*/}
-                            </Row>
-                            <br/>
+                            <h3><span className="specText">Food Identifier</span></h3>
+                                <label className="input-file">
+                                    Enter Your Image Here!
+                                    <input type="file" id="inputImage" name="image" className="file-input" onChange={this.handleInput.bind(this)} />
+                                </label>
                             <Row>
                                 <canvas id="imageCanvas" className="image-canvas" />
                             </Row>
                             <br/>
                             <span>Result:</span>
                             <Row>
-                                <Col xs="12" md="6">
+                                <Col xs="12" md="3">
                                     <Card>
                                         <CardBody>
                                             <Row>
@@ -187,12 +191,80 @@ class Home extends Component {
                                         </CardBody>
                                     </Card>
                                 </Col>
-                                <Col xs="12" md="6">
+                                <Col xs="12" md="9">
                                     <Card>
                                         <CardBody>
-                                            <p>asd</p>
+                                            <strong>Nearest Restaurant</strong>
+                                            <hr />
+                                            <Row>
+                                              <Col sm="12" md="4">
+                                                  <Card>
+                                                      <CardBody>
+                                                          <strong><u><p>Restaurant</p></u></strong>
+                                                          <p><strong>Name:</strong> {this.state.restaurantName[0]}</p>
+                                                          <strong><p>Address:</p></strong>
+                                                          <p>{this.state.restaurantAddress[0]}</p>
+                                                      </CardBody>
+                                                  </Card>
+                                              </Col>
+                                              <Col sm="12" md="4">
+                                                <Card>
+                                                  <CardBody>
+                                                    <strong><u><p>Restaurant</p></u></strong>
+                                                    <p><strong>Name:</strong> {this.state.restaurantName[1]}</p>
+                                                    <strong><p>Address:</p></strong>
+                                                    <p>{this.state.restaurantAddress[1]}</p>
+                                                  </CardBody>
+                                                </Card>
+                                              </Col>
+                                              <Col sm="12" md="4">
+                                                <Card>
+                                                  <CardBody>
+                                                    <strong><u><p>Restaurant</p></u></strong>
+                                                    <p><strong>Name:</strong> {this.state.restaurantName[2]}</p>
+                                                    <strong><p>Address:</p></strong>
+                                                    <p>{this.state.restaurantAddress[2]}</p>
+                                                  </CardBody>
+                                                </Card>
+                                              </Col>
+                                            </Row>
                                         </CardBody>
                                     </Card>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs="12" md="4">
+                                    <Card>
+                                      <CardBody>
+                                          <p><strong>Link to Popular Recipe:</strong></p>
+                                          <a href={this.state.foodRecipe[0]}>{this.state.foodRecipe[0]}</a>
+                                          <br/><br/>
+                                          <p><strong>Calories:</strong></p>
+                                          <p>{this.state.foodCalories[0]}</p>
+                                      </CardBody>
+                                    </Card>
+                                </Col>
+                                <Col xs="12" md="4">
+                                  <Card>
+                                    <CardBody>
+                                      <p><strong>Link to Popular Recipe:</strong></p>
+                                      <a href={this.state.foodRecipe[1]}>{this.state.foodRecipe[1]}</a>
+                                      <br/><br/>
+                                      <p><strong>Calories:</strong></p>
+                                      <p>{this.state.foodCalories[1]}</p>
+                                    </CardBody>
+                                  </Card>
+                                </Col>
+                                <Col xs="12" md="4">
+                                  <Card>
+                                    <CardBody>
+                                      <p><strong>Link to Popular Recipe:</strong></p>
+                                      <a href={this.state.foodRecipe[2]}>{this.state.foodRecipe[2]}</a>
+                                      <br/><br/>
+                                      <p><strong>Calories:</strong></p>
+                                      <p>{this.state.foodCalories[2]}</p>
+                                    </CardBody>
+                                  </Card>
                                 </Col>
                             </Row>
                         </CardBody>
