@@ -21,7 +21,8 @@ class Home extends Component {
             restaurantName: ["","",""],
             restaurantAddress: ["","",""],
             foodCalories: [0,0,0],
-            foodRecipe: ["","",""]
+            foodRecipe: ["","",""],
+            foodImage: ["","",""]
         };
     }
 
@@ -153,9 +154,16 @@ class Home extends Component {
               recipe.push(data.hits[1].recipe.url);
               recipe.push(data.hits[2].recipe.url);
 
+              var image = [];
+              image.push(data.hits[0].recipe.image);
+              image.push(data.hits[1].recipe.image);
+              image.push(data.hits[2].recipe.image);
+              console.log(image);
+
               this.setState({
-                foodCalories: [calories[0],calories[1],calories[2]],
-                foodRecipe: [recipe[0],recipe[1],recipe[2]]
+                  foodCalories: [calories[0],calories[1],calories[2]],
+                  foodRecipe: [recipe[0],recipe[1],recipe[2]],
+                  foodImage: [image[0],image[1],image[2]]
               });
               console.log(this.state);
             });
@@ -241,6 +249,7 @@ class Home extends Component {
                                           <br/><br/>
                                           <p><strong>Calories:</strong></p>
                                           <p>{this.state.foodCalories[0]}</p>
+                                          <img src={this.state.foodImage[0]} alt="Default Image" height="150" width="150" />
                                       </CardBody>
                                     </Card>
                                 </Col>
@@ -252,6 +261,7 @@ class Home extends Component {
                                       <br/><br/>
                                       <p><strong>Calories:</strong></p>
                                       <p>{this.state.foodCalories[1]}</p>
+                                      <img src={this.state.foodImage[1]} alt="Default" height="150" width="150" />
                                     </CardBody>
                                   </Card>
                                 </Col>
@@ -263,6 +273,7 @@ class Home extends Component {
                                       <br/><br/>
                                       <p><strong>Calories:</strong></p>
                                       <p>{this.state.foodCalories[2]}</p>
+                                      <img src={this.state.foodImage[2]} alt="Default Image" height="150" width="150" />
                                     </CardBody>
                                   </Card>
                                 </Col>
