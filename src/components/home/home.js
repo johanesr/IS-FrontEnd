@@ -77,7 +77,7 @@ class Home extends Component {
         formData.append('image',input.files[0]);
 
         const upload = (inputFile) => {
-            fetch('http://192.168.1.103:5000/classify-image', {
+            fetch('http://localhost:5000/classify-image', {
                 method: 'POST',
                 // headers: {
                 //     "Content-type": "application/json",
